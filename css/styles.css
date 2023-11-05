@@ -1,0 +1,65 @@
+#nv{
+    color: green;
+}
+
+
+.navbar {
+    padding: 10px; 
+    height: 100px; 
+  }
+
+.navbar-nav .nav-link {
+    font-size: 16px; 
+  }
+  
+.textoBlanco{
+    color:white;
+}
+
+.textoCarta{
+    font-family: Arial;
+}
+
+
+.sombra-imagen {
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.9);
+}
+
+
+.custom-caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  /*background: rgba(0, 0, 0, 0.5);*/
+  color: white;
+  padding: 20px;
+  text-align: right;
+}
+
+.button-group {
+  text-align: right;
+  margin-top: 10px;
+}
+
+
+.imagen-oscura {
+  filter: brightness(100%) contrast(50%);
+}
+
+
+
+
+
+
+  
+  
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+ 
