@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <div class="d-flex justify-content-center">
+        
+        <p>Convierte en un </p>
+    </div>
+    <div class="d-flex justify-content-center">
+        <h2>ORADOR</h2>
+    </div>
+
+    <!--nuevo-->
+    <fieldset>
+        <legend>Nuevo Orador</legend>
+        <input name="nombre" id="nombre" placeholder="nombre" autocomplete="off">
+        <input name="apellido" id="apellido" placeholder="apellido" autocomplete="off">
+        <input name="mail" id="mail" placeholder="mail" autocomplete="off">  
+        <input name="tema" id="tema" placeholder="tema" autocomplete="off">
+        <button type="button" id="btnCrear" class="btn btn-success">
+            Enviar
+        </button>
+    </fieldset>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mt-2">
+                <button class="btn btn-success" id="btnGetUsers">
+                    Listar Oradores
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-1" id="msj">
+
+            </div>
+            <div class="col-12">
+                <div id="users">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Mail</th>
+                            <th scope="col">Tema</th>
+                            <th scope="col">&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody id="usersRows">                          
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Actualizar-->
+    <div class="modal fade" id="ModalActualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="ModalLabelEditar">Editar Orador</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!--div class="modal-body">
+                <input id="nombreActualizar">
+                <input id="apellidoActualizar">
+                <input id="mailActualizar">
+                <input id="temaActualizar">
+            </div!-->
+            <div class="modal-body">
+                
+                <form>
+                   
+                    <div class="form-group">
+                      <label for="nombreActualizar">Nombre:</label>
+                      <input type="text" id="nombreActualizar" class="form-control">
+                      <label for="apellidoActualizar">Apellido:</label>
+                      <input type="text" id="apellidoActualizar" class="form-control">
+                      <label for="mailActualizar">Mail:</label>
+                      <input type="text" id="mailActualizar" class="form-control">
+                      <label for="temaActualizar">Tema:</label>
+                      <input type="text" id="temaActualizar" class="form-control">
+                    </div>
+                    
+                  </form>
+
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCerrarModal">
+                Cancelar
+            </button>
+            <button type="button" class="btn btn-primary" onclick="actualizarOrador()">
+                Actualizar
+            </button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal Eliminar-->
+    <div class="modal fade" id="ModalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="ModalLabelEliminar">Eliminar Orador</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <form>
+                   
+                    <div class="form-group">
+                      <label for="nombreEliminar">Nombre:</label>
+                      <input type="text" id="nombreEliminar" class="form-control" readonly>
+                      <label for="apellidoEliminar">Apellido:</label>
+                      <input type="text" id="apellidoEliminar" class="form-control" readonly>
+                      <label for="mailEliminar">Mail:</label>
+                      <input type="text" id="mailEliminar" class="form-control" readonly>
+                      <label for="temaEliminar">Tema:</label>
+                      <input type="text" id="temaEliminar" class="form-control" readonly>
+                    </div>
+                    
+                  </form>
+
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCerrarModalElim">
+                Cancelar
+            </button>
+            <button type="button" class="btn btn-danger" onclick=eliminarOrador()>
+                Borrar
+            </button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal para mostrar mensajes -->
+    <div class="modal fade" id="mensajeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body" id="mensajeBody">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- nuevo-->
+    <script>
+
+    function limpiarCampos() {
+            document.getElementById("nombre").value = "";
+            document.getElementById("apellido").value = "";
+            document.getElementById("mail").value = "";
+            document.getElementById("tema").value = "";
+            
+        }
+        
+            crearOperador = () => {
+                //debugger;
+                if (nombre !== "" && apellido !== "" && mail !== "" && tema !== "") {
+                const orador = {
+                    nombre:  document.getElementById("nombre").value,
+                    apellido: document.getElementById("apellido").value,
+                    mail: document.getElementById("mail").value,
+                    tema: document.getElementById("tema").value
+                    
+                    
+                };
+
+                //debo enviar estos datos al sevidor: https://www.freecodecamp.org/espanol/news/tutorial-de-fetch-api-en-javascript-con-ejemplos-de-js-fetch-post-y-header/
+                fetch(`http://localhost:8080/web-app-23544/api/orador`, {
+                    method: "POST",
+                    body: JSON.stringify(orador),
+                })
+                .then(response => response.json()) 
+                .then(json => {
+                    //alert(`alta de orador id:${json.id} ok`);
+                    const mensaje = `Alta de orador ID: ${json.id} exitosa`;
+                    mostrarMensaje(mensaje);
+                    limpiarCampos();
+                })
+                .catch(err => console.log(err));
+            } else {
+        mostrarMensaje('Por favor ingrese valores en los campos no vacíos');
+            }
+    }
+
+            
+            document.getElementById("btnCrear").addEventListener('click',crearOperador);
+       
+
+
+    
+    function mostrarMensaje(mensaje) {
+    
+    document.getElementById('mensajeBody').innerText = mensaje;
+    //var mensajeBody = document.getElementById('mensajeBody');
+    //mensajeBody.innerText = mensaje;
+    //mensajeBody.classList.add('text-success');
+    
+   
+    // Muestra el modal
+    var mensajeModal = new bootstrap.Modal(document.getElementById('mensajeModal'));
+    mensajeModal.show();
+
+   setTimeout(function() {
+      mensajeModal.hide();
+    }, 2000);
+} 
+    </script>
+
+    <!--listado-->
+    <script>
+        function listarOradores() {/*f2*/
+            //1 preparar
+            const respuesta = fetch(`http://localhost:8080/web-app-23544/api/orador`);
+
+            //2 invocar
+            respuesta
+                .then(response => response.json())
+                .then(data => procesarListado(data))//fulfilled
+                .catch(error => dibujarError(error))//rejected
+        }
+        function procesarListado(data) {
+
+            //guardo en localStorage
+            saveOradoresInFromLocal('oradores', data);
+            saveOradoresElimInFromLocal('oradores', data);
+
+            const listarOradores = data;
+            let rows = '';
+            for(let orador of listarOradores) {
+                console.log(orador);
+                rows += `
+                <tr>
+                    <th scope="row">${orador.id}</th>
+                    <td>${orador.nombre}</td>
+                    <td>${orador.apellido}</td>
+                    <td>${orador.mail}</td>
+                    <td>${orador.tema}</td>
+                    
+                    
+                    <td>
+                        <button type="button" id="editar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalActualizar" onclick="editar(${orador.id})">
+                            Editar
+                        </button>
+                        <button type="button" id="eliminar" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ModalEliminar" onclick="eliminar(${orador.id})" >
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+                `
+            }
+            document.getElementById('usersRows').innerHTML = rows;
+        }
+
+        function dibujarError(error) {
+            console.log(error);
+            const alerta = `<div class="alert alert-danger" role="alert">
+                ${error.toString()}
+            </div>`;
+            document.getElementById('msj').innerHTML = alerta;
+        }
+
+        document.getElementById('btnGetUsers').addEventListener('click',listarOradores);
+    </script>
+
+    <!--eliminar-->
+    <script>
+       const getOradoresElimFromLocal = () => {
+        const oradores = localStorage.getItem('oradores')
+        if(oradores) {
+            return JSON.parse(oradores);
+        }
+        return [];
+    }
+    const getOradorElimSeleccionado = () => {
+        const obj = localStorage.getItem('oradorBuscado')
+        if(obj) {
+            return JSON.parse(obj);
+        }
+        return null;
+    }
+    const removeOradorElimSeleccionado = () => {
+        localStorage.removeItem('oradorBuscado');
+    }
+
+    const saveOradoresElimInFromLocal = (key, data) => {
+        localStorage.setItem(key, JSON.stringify(data));//como texto
+    }
+
+    const eliminar = (id) => {
+        const oradores = getOradoresElimFromLocal();//[]
+        const oradorBuscado = oradores.find(o => o.id === id);
+        
+        //si quiero actualizar algo en un html (.innerHTML o .value)
+        document.getElementById('nombreEliminar').value = oradorBuscado.nombre;
+        document.getElementById('apellidoEliminar').value = oradorBuscado.apellido;
+        document.getElementById('mailEliminar').value = oradorBuscado.mail;
+        document.getElementById('temaEliminar').value = oradorBuscado.tema;
+       
+        
+
+        //guardo el id/orador del orador que se quiere actualizar
+        saveOradoresElimInFromLocal('oradorBuscado', oradorBuscado);
+    } 
+
+        eliminarOrador = () => {
+            const oradorSeleccionadoElim = getOradorElimSeleccionado();
+        if(!oradorSeleccionadoElim) {
+            return
+        }
+
+        //obtengo los datos del formulario que esta en el modal
+        const nombre = document.getElementById('nombreEliminar').value;
+        const apellido = document.getElementById('apellidoEliminar').value;
+        const mail = document.getElementById('mailEliminar').value;
+        const tema = document.getElementById('temaEliminar').value;
+        
+        
+
+        const orador = {
+             nombre,
+             apellido,
+             mail,
+             tema
+             
+             
+        };
+            
+            if(!confirm('SEGURO?')) {
+                return;
+            }
+
+   
+            
+            fetch(`http://localhost:8080/web-app-23544/api/orador?id=${oradorSeleccionadoElim.id}`, {
+                method: "DELETE",
+                body: JSON.stringify(orador),
+                
+                
+            })
+            .then(response => response) 
+            .then(json => {
+                //const mensaje = `Se ha eliminado el orador ID: ${id} correctamente`;
+                mostrarMensajeEliminacion('Se ha eliminado el orador correctamente');
+                //alert(`se ha eliminado el orador id: ${id}`);
+                
+                listarOradores();
+                removeOradorElimSeleccionado();
+                cerrarModalElim();
+            })
+            .catch(err => console.log(err));
+        }
+        function mostrarMensajeEliminacion(mensaje) {
+    
+    document.getElementById('mensajeBody').innerText = mensaje;
+    //var mensajeBody = document.getElementById('mensajeBody');
+    //mensajeBody.innerText = mensaje;
+    //mensajeBody.classList.add('text-success');
+    
+   
+    // Muestra el modal
+    var mensajeModal = new bootstrap.Modal(document.getElementById('mensajeModal'));
+    mensajeModal.show();
+
+   setTimeout(function() {
+      mensajeModal.hide();
+    }, 4000);
+  }
+ 
+    const cerrarModalElim = () => {
+        document.getElementById('btnCerrarModalElim').click();
+    } 
+        
+    
+
+
+    </script>
+
+
+<!--actualizar-->
+<script>
+    const getOradoresFromLocal = () => {
+        const oradores = localStorage.getItem('oradores')
+        if(oradores) {
+            return JSON.parse(oradores);
+        }
+        return [];
+    }
+    const getOradorSeleccionado = () => {
+        const obj = localStorage.getItem('oradorBuscado')
+        if(obj) {
+            return JSON.parse(obj);
+        }
+        return null;
+    }
+    const removeOradorSeleccionado = () => {
+        localStorage.removeItem('oradorBuscado');
+    }
+
+    const saveOradoresInFromLocal = (key, data) => {
+        localStorage.setItem(key, JSON.stringify(data));//como texto
+    }
+
+    const editar = (id) => {
+        
+        const oradores = getOradoresFromLocal();//[]
+        const oradorBuscado = oradores.find(o => o.id === id);
+        
+        //si quiero actualizar algo en un html (.innerHTML o .value)
+        document.getElementById('nombreActualizar').value = oradorBuscado.nombre;
+        document.getElementById('apellidoActualizar').value = oradorBuscado.apellido;
+        document.getElementById('mailActualizar').value = oradorBuscado.mail;
+        document.getElementById('temaActualizar').value = oradorBuscado.tema;
+
+        
+        //guardo el id/orador del orador que se quiere actualizar
+        saveOradoresInFromLocal('oradorBuscado', oradorBuscado);
+          
+    }
+
+    const actualizarOrador = () => {
+        const oradorSeleccionado = getOradorSeleccionado();
+        if(!oradorSeleccionado) {
+            return
+        }
+
+       
+
+        //obtengo los datos del formulario que esta en el modal
+        const nombre = document.getElementById('nombreActualizar').value;
+        const apellido = document.getElementById('apellidoActualizar').value;
+        const mail = document.getElementById('mailActualizar').value;
+        const tema = document.getElementById('temaActualizar').value;
+        
+        //obtengo nuevamente para validar que no se haya modificado nada
+        /*const nombreOriginal = document.getElementById('nombreActualizar').value;
+        const apellidoOriginal = document.getElementById('apellidoActualizar').value;
+        const mailOriginal = document.getElementById('mailActualizar').value;
+        const temaOriginal = document.getElementById('temaActualizar').value;
+        
+        if (
+            nombre === nombreOriginal &&
+            apellido === apellidoOriginal &&
+            mail === mailOriginal &&
+            tema === temaOriginal
+        ) {
+            // No se han realizado cambios
+            mostrarMensajeActualizacion('No se ha actualizado ningún campo.');
+        } else {*/
+
+        const orador = {
+             nombre,
+             apellido,
+             mail,
+             tema
+             
+             
+        };
+
+        //ahora puedo enviar al backend para actualizar
+        //debo enviar estos datos al sevidor: https://www.freecodecamp.org/espanol/news/tutorial-de-fetch-api-en-javascript-con-ejemplos-de-js-fetch-post-y-header/
+        fetch(`http://localhost:8080/web-app-23544/api/orador?id=${oradorSeleccionado.id}`, {
+            method: "PUT",
+            body: JSON.stringify(orador),
+        })
+        .then(response => response) //status code 200
+        .then(json => {
+            //alert(`Se ha modificado el orador id:${oradorSeleccionado.id}`);
+            
+            //cargar la lista
+            //if (cambiosRealizados) {
+                const mensaje = `Se ha actualizado el orador ID: ${oradorSeleccionado.id} satisfactoriamente`;
+                mostrarMensajeActualizacion(mensaje);
+               
+            //} 
+            listarOradores();
+            removeOradorSeleccionado();
+            cerrarModal();
+
+            
+            
+        })
+        .catch(err => console.log(err));
+      //}
+    }
+
+    /*function detectarCambios() {
+        cambiosRealizados = true;
+    }*/
+
+    function mostrarMensajeActualizacion(mensaje) {
+    
+    document.getElementById('mensajeBody').innerText = mensaje;
+    //var mensajeBody = document.getElementById('mensajeBody');
+    //mensajeBody.innerText = mensaje;
+    //mensajeBody.classList.add('text-success');
+    
+   
+    // Muestra el modal
+    var mensajeModal = new bootstrap.Modal(document.getElementById('mensajeModal'));
+    mensajeModal.show();
+
+   setTimeout(function() {
+      mensajeModal.hide();
+    }, 2000);
+  }
+
+    const cerrarModal = () => {
+        document.getElementById('btnCerrarModal').click();
+    }
+
+    
+
+</script>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+</body>
+</html>

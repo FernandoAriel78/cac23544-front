@@ -33,7 +33,7 @@
                 <a class="nav-link" href="#">El lugar y la fecha</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Conviértete en orador</a>
+                <a class="nav-link" href="#nuevoorador">Conviértete en orador</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="tickets.html" id="nv"> Comprar Ticket</a>
@@ -257,22 +257,101 @@
 
 
 
-      <div class="container-fluid">
+      <div class="container-fluid" id="nuevoorador">
         <div class="row g-3 m-3 justify-content-center">
-          <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
-            <input type="text" class="form-control " placeholder="First name" aria-label="First name">
+          <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+            <input type="text" class="form-control " placeholder="First name" aria-label="First name" autocomplete="off" id="nombre">
           </div>
-          <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
-            <input type="text" class="form-control " placeholder="Last name" aria-label="Last name">
+          <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+            <input type="text" class="form-control " placeholder="Last name" aria-label="Last name" autocomplete="off" id="apellido">
+          </div>
+          <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+            <input type="text" class="form-control " placeholder="Mail" aria-label="Mail" autocomplete="off" id="mail">
           </div>
           <div class="mb-3 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 m-3">
-            <textarea class="form-control" rows="3" placeholder="Sobre qu&eacute; quieres hablar?"></textarea>
+            <textarea class="form-control" rows="3" placeholder="Sobre qu&eacute; quieres hablar?" id="tema"></textarea>
           </div>
           <div class="d-grid gap-1 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-            <button class="btn btn-success" type="button">Enviar</button>
+            <button class="btn btn-success" type="button" id="btnEnviar">Enviar</button>
           </div>
         </div>
-      </div> 
+      </div>
+
+      <!-- Modal para mostrar mensajes -->
+    <div class="modal fade" id="mensajeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+              <div class="modal-body" id="mensajeBody">
+                  
+              </div>
+          </div>
+      </div>
+  </div>
+      
+      <!-- nuevo-->
+    <script>
+      function limpiarCampos() {
+        document.getElementById("nombre").value = "";
+        document.getElementById("apellido").value = "";
+        document.getElementById("mail").value = "";
+        document.getElementById("tema").value = "";
+        
+      }
+
+      crearOperador = () => {
+          //debugger;
+          if (nombre !== "" && apellido !== "" && mail !== "" && tema !== "") {
+          const orador = {
+               nombre:  document.getElementById("nombre").value,
+               apellido: document.getElementById("apellido").value,
+               mail: document.getElementById("mail").value,
+               tema: document.getElementById("tema").value
+              
+               
+          };
+
+          //debo enviar estos datos al sevidor: https://www.freecodecamp.org/espanol/news/tutorial-de-fetch-api-en-javascript-con-ejemplos-de-js-fetch-post-y-header/
+          fetch(`http://localhost:8080/web-app-23544/api/orador`, {
+              method: "POST",
+              body: JSON.stringify(orador),
+          })
+          .then(response => response.json()) 
+          .then(json => {
+              alert(`alta de orador id:${json.id} ok`);
+              //const mensaje = `Alta de orador ID: ${json.id} exitosa`;
+                //    mostrarMensaje(mensaje);
+              limpiarCampos();
+              window.location.href = "registrar_oradores.html";
+              //listarOradores();
+          })
+          .catch(err => console.log(err));
+        } else {
+        mostrarMensaje('Por favor ingrese valores en los campos no vacíos');
+        }
+    }
+
+      document.getElementById("btnEnviar").addEventListener('click',crearOperador);
+
+      function mostrarMensaje(mensaje) {
+    
+    document.getElementById('mensajeBody').innerText = mensaje;
+    //var mensajeBody = document.getElementById('mensajeBody');
+    //mensajeBody.innerText = mensaje;
+    //mensajeBody.classList.add('text-success');
+    
+   
+    // Muestra el modal
+    var mensajeModal = new bootstrap.Modal(document.getElementById('mensajeModal'));
+    mensajeModal.show();
+
+   setTimeout(function() {
+      mensajeModal.hide();
+    }, 2000);
+}   
+      
+  </script>
+
+  
         
     <footer>
       <div class="container-fluid">  
